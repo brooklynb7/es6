@@ -138,3 +138,47 @@ function* splitIntoRowsGenerator(icons, rowLength) {
 for (var value of splitIntoRowsGenerator([1, 2, 3, 4, 5], 3)) {
 	console.log('SplitIntoRows Genrators ' + value);
 }
+
+
+setSectionBegin('Template String');
+
+function showTemplateString(user) {
+	console.log(`Test Template String: ${user.lastName}, ${user.firstName}.`);
+}
+
+showTemplateString({
+	firstName: 'Brooklyn',
+	lastName: 'Huang'
+});
+
+function showTemplateString2() {
+	console.log(`
+\`Test\` $\{Template} String 2: ${function(){return 'Function called'}()}.
+\`Test\` $\{Template} String 2': ${function(){return 'Function called 2'}()}.
+	`);
+}
+
+showTemplateString2();
+
+function saferHTML(templateData) {
+	console.log(templateData);
+	var s = templateData[0];
+	for (var i = 1; i < arguments.length; i++) {
+		var arg = String(arguments[i]);
+
+		// Escape special characters in the substitution.
+		s += arg.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;");
+
+		// Don't escape special characters in the template.
+		s += templateData[i];
+	}
+	return s;
+}
+
+var user = {
+	name: 'Hacker Steve <script>alert(\'xss\');</script>'
+};
+
+console.log(saferHTML `<p>Test tagged template: ${user.name}<p>`);
